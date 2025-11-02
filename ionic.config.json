@@ -1,0 +1,7 @@
+{
+  "name": "zudum-a",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
