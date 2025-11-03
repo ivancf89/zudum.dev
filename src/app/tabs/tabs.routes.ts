@@ -3,7 +3,7 @@ import { TabsPage } from './tabs.page';
 
 export const routes: Routes = [
   {
-    path: 'tabs',
+    path: '', // Esta ruta es la que usa Router.navigate(['/tabs']) para cargar el componente padre
     component: TabsPage,
     children: [
       {
@@ -21,6 +21,7 @@ export const routes: Routes = [
         loadComponent: () =>
           import('../tab3/tab3.page').then((m) => m.Tab3Page),
       },
+      // Redirección por defecto DENTRO de las pestañas
       {
         path: '',
         redirectTo: '/tabs/tab1',
@@ -28,9 +29,5 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: '',
-    redirectTo: '/tabs/tab1',
-    pathMatch: 'full',
-  },
+  // No se necesita ninguna otra ruta externa para 'tabs' aquí.
 ];

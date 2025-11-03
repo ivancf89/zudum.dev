@@ -1,19 +1,28 @@
 <ion-header [translucent]="true">
   <ion-toolbar color="primary">
-    <ion-title>Zudum - Agregar Serie</ion-title>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/tab1"></ion-back-button>
+    </ion-buttons>
+    <ion-title>
+      Detalle: {{ serie?.titulo }}
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button color="danger" (click)="openDeleteAlert()">
+        <ion-icon name="trash"></ion-icon>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true" class="ion-padding">
   
-  <form [formGroup]="agregarForm" (ngSubmit)="agregarSerie()">
+  <form [formGroup]="detalleForm" (ngSubmit)="actualizarSerie()" *ngIf="serie">
     <ion-list>
       
       <ion-item>
         <ion-input
           label="Título de la Serie"
           labelPlacement="stacked"
-          placeholder="Ej: The Mandalorian"
           formControlName="titulo" 
         ></ion-input>
       </ion-item>
@@ -30,7 +39,6 @@
         <ion-textarea
           label="Sinopsis / Descripción"
           labelPlacement="stacked"
-          placeholder="Sinopsis de la serie (máx. 250 caracteres)"
           formControlName="sinopsis" 
           rows="4"
         ></ion-textarea>
@@ -50,7 +58,6 @@
           label="Temporadas"
           labelPlacement="stacked"
           type="number"
-          placeholder="Número de temporadas (Mín. 1)"
           formControlName="temporadas" 
         ></ion-input>
       </ion-item>
@@ -69,7 +76,6 @@
         <ion-select
           label="Estado de la Serie"
           labelPlacement="stacked"
-          placeholder="Selecciona un estado"
           formControlName="estado"
         >
           <ion-select-option *ngFor="let estado of estados" [value]="estado">
@@ -89,9 +95,19 @@
     </ion-list>
 
     <ion-button expand="block" type="submit" class="ion-margin-top">
-      Guardar Serie
+      Guardar Cambios
     </ion-button>
 
   </form>
+  
+  <ion-alert
+    [isOpen]="isAlertOpen"
+    header="Confirmar Eliminación"
+    subHeader="Eliminar: {{ serie?.titulo }}"
+    message="¿Estás seguro de que deseas eliminar esta serie? Esta acción no se puede deshacer."
+    [buttons]="alertButtons"
+    [inputs]="alertInputs"
+    (didDismiss)="confirmDelete($event.detail.role === 'confirm')"
+  ></ion-alert>
 
 </ion-content>

@@ -17,7 +17,7 @@ import {
   IonAlert, 
   IonToast,
   IonIcon,
-  IonNote
+  IonNote // <--- ¡AÑADIDO PARA SOLUCIONAR EL ERROR DE COMPILACIÓN!
 } from '@ionic/angular/standalone';
 import { 
   ReactiveFormsModule, 
@@ -53,7 +53,7 @@ import { trash } from 'ionicons/icons';
     IonAlert,
     IonToast,
     IonIcon,
-    IonNote,
+    IonNote, // <--- ¡AÑADIDO AQUÍ TAMBIÉN!
     CommonModule, 
     ReactiveFormsModule
   ]
@@ -62,6 +62,7 @@ export class DetalleSeriePage implements OnInit {
   
   detalleForm: FormGroup;
   serieId: string | null = null;
+  // Inicializamos a null para evitar errores de carga
   serie: Serie | null = null; 
   estados = ['Pendiente', 'Viendo', 'Terminada'];
   isAlertOpen = false;
@@ -74,6 +75,7 @@ export class DetalleSeriePage implements OnInit {
   ) {
     addIcons({ trash });
     
+    // Formulario de edición con las mismas validaciones de la creación
     this.detalleForm = this.fb.group({
       titulo: ['', [Validators.required]],
       sinopsis: ['', [Validators.required, Validators.maxLength(250)]],
@@ -95,6 +97,7 @@ export class DetalleSeriePage implements OnInit {
       if (serieEncontrada) {
         this.serie = serieEncontrada;
         
+        // Rellena el formulario con los datos de la serie
         this.detalleForm.patchValue({
             titulo: serieEncontrada.titulo,
             sinopsis: serieEncontrada.sinopsis,
@@ -103,16 +106,18 @@ export class DetalleSeriePage implements OnInit {
         });
         
       } else {
+        // Si no se encuentra, redirige a la lista
         this.router.navigate(['/tabs/tab1']);
       }
     }
   }
 
   get f() {
+    // Retorna los controles del formulario
     return this.detalleForm.controls;
   }
 
-  // FUNCIÓN UPDATE MODIFICADA PARA FORZAR RECARGA
+  // Función para guardar los cambios (UPDATE)
   actualizarSerie() {
     if (this.detalleForm.invalid || !this.serieId) {
       this.detalleForm.markAllAsTouched();
@@ -125,29 +130,30 @@ export class DetalleSeriePage implements OnInit {
     };
 
     this.seriesService.updateSerie(updatedSerie);
-    // REDIRECCIÓN FORZADA
-    this.router.navigate(['/tabs/tab1']); 
+    this.router.navigate(['/tabs/tab1']);
   }
   
   // ----------------------------------------------------
   // DELETE (Eliminar y Confirmación)
   // ----------------------------------------------------
   
+  // Abre el diálogo de confirmación
   openDeleteAlert() {
     this.isAlertOpen = true;
   }
 
-  // FUNCIÓN DELETE MODIFICADA PARA FORZAR RECARGA
+  // Función que se ejecuta si se confirma el borrado
   confirmDelete(confirmed: boolean) {
     this.isAlertOpen = false;
     
     if (confirmed && this.serieId) {
       this.seriesService.deleteSerie(this.serieId);
-      // REDIRECCIÓN FORZADA
+      // Navega a la lista tras eliminar
       this.router.navigate(['/tabs/tab1']);
     }
   }
   
+  // Configuración del ion-alert (para el requisito de confirmación)
   public alertButtons = [
     {
       text: 'Cancelar',

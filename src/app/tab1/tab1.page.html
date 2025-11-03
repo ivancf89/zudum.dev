@@ -1,17 +1,51 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="primary">
     <ion-title>
-      Tab 1
+      <ion-icon name="videocam-outline"></ion-icon> Zudum - Mis Series
     </ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">Tab 1</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  
+  <ion-list>
+    <ion-item 
+      *ngFor="let serie of series" 
+      detail="true"
+      button
+      [routerLink]="['/detalle-serie', serie.id]" 
+      routerDirection="forward"
+      class="ion-margin-vertical"
+    >
+      <ion-label>
+        <h2>{{ serie.titulo }}</h2>
+        <p>
+          Estado: 
+          <ion-note 
+            [color]="serie.estado === 'Viendo' ? 'success' : 
+                    serie.estado === 'Terminada' ? 'warning' : 'medium'"
+          >
+            {{ serie.estado }}
+          </ion-note>
+        </p>
+      </ion-label>
 
-  <app-explore-container name="Tab 1 page"></app-explore-container>
+      <ion-note slot="end" class="ion-text-wrap">
+        {{ serie.temporadas }} Temp.
+      </ion-note>
+    </ion-item>
+    
+    <ion-item *ngIf="series.length === 0">
+      <ion-label color="medium" class="ion-text-center">
+        No hay series registradas. ¡Añade una!
+      </ion-label>
+    </ion-item>
+  </ion-list>
+  
+  <ion-fab slot="fixed" vertical="bottom" horizontal="end">
+    <ion-fab-button routerLink="/tabs/tab2" color="primary">
+      <ion-icon name="add"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+
 </ion-content>
